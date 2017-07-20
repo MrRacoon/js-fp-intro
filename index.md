@@ -4,7 +4,7 @@ Erik Sutherland
 
 > https://github.com/MrRacoon/js-fp-intro
 
----
+----
 
 ## About Me
 
@@ -13,6 +13,14 @@ Erik Sutherland
 * Affinity for Haskell
 * Started in DevOps (wootz 4 linux)
 * Frontend for 5 years
+
+----
+
+## Main themes in this talk
+
+* Type Signatures
+* Composition
+* Currying
 
 ---
 
@@ -30,14 +38,14 @@ Erik Sutherland
 * Partial application (`.bind`)
 * Mostly enabled through libraries (`lodash`, `ramda`)
 
----
+----
 
 ## Main themes of Lodash
 
 * Advocates chaining
 * Employs cool tricks for lazy evaluation
 
----
+----
 
 ## Main themes of Ramda
 
@@ -61,9 +69,9 @@ Erik Sutherland
 * (a -> b -> c) (binary function)
 * (*... -> c) (varadic argument function)
 
----
+----
 
-## Types examples
+## Types Signatures
 
 ```javascript
 // add :: Number -> Number -> Number
@@ -73,24 +81,25 @@ add = (a, b) => a + b;
 map = (fn, list) => list.map(fn);
 ```
 
----
+----
 
 ## Composition
 
 #### It's the law
 
-```
-f :: a -> b
-g :: b -> c
-h :: c -> d
+```javascript
+// f :: a -> b
+// g :: b -> c
+// h :: c -> d
 
 // compose :: ...fns -> (...args -> a)
-
 compose(h, g, f)(x) === h(g(f(x)));
+
+// pipe :: ...fns -> (...args -> a)
 pipe(f, g, h)(x) === h(g(f(x)));
 ```
 
----
+----
 
 ## Currying
 
@@ -107,7 +116,7 @@ const result = add10(2); // 12
 
 ---
 
-## Composition Example
+## Native Example
 
 #### Some data
 
@@ -130,9 +139,9 @@ const data = [
 
 ```
 
----
+----
 
-## Composition Example
+## Native Example
 
 #### Some functions
 
@@ -150,9 +159,9 @@ const getNames = list =>
   );
 ```
 
----
+----
 
-## Composition Example
+## Native Example
 
 #### Calling them together
 
@@ -170,7 +179,8 @@ vegieNames(data); // ['cauliflower']
 
 #### Add in some compose
 
-```
+```javascript
+// vegieNames :: [Produce] -> [String]
 const vegieNames = list => compose(
   getNames,
   onlyVegetables,
@@ -179,13 +189,14 @@ const vegieNames = list => compose(
 vegieNames(data); // ['cauliflower']
 ```
 
----
+----
 
 ## Composition Example
 
 #### Or use pipe
 
-```
+```javascript
+// vegieNames :: [Produce] -> [String]
 const vegieNames = list => pipe(
   onlyVegetables,
   getNames,
@@ -194,13 +205,14 @@ const vegieNames = list => pipe(
 vegieNames(data); // ['cauliflower']
 ```
 
----
+----
 
 ## Composition Example
 
 #### Sprinkle in some Curry
 
-```
+```javascript
+// vegieNames :: [Produce] -> [String]
 const vegieNames = pipe(
   onlyVegetables,
   getNames,
@@ -211,7 +223,7 @@ vegieNames(data); // ['cauliflower']
 
 ---
 
-## Composition Example
+## Full FP Example
 
 #### Revisiting the functions
 
@@ -227,9 +239,9 @@ const getNames = map(
 );
 ```
 
----
+----
 
-## Composition Example
+## Full FP Example
 
 #### The extra mile
 
@@ -243,23 +255,23 @@ const onlyVegetables = filter(
 const getNames = map(
   prop('name')
 );
-```
 
----
-
-## Composition Example
-
-#### Cut out the middleman
-
-```
-// before
-const getVegies = pipe(
+// vegieNames :: [Produce] -> [String]
+const vegieNames = pipe(
   onlyVegetables,
   getNames,
 );
+```
 
-// after
-const getVegies = pipe(
+----
+
+## Full FP Example
+
+#### Cut out the middleman
+
+```javascript
+// vegieNames :: [Produce] -> [String]
+const vegieNames = pipe(
   filter(whereEq({ type: 'vegetables' })),
   map(prop('name'))
 );
@@ -267,28 +279,28 @@ const getVegies = pipe(
 
 ---
 
-## Swiss army effect
-
-* All functions serve a purpose
-* each one encodes a **pattern**
-* Recognizing the input and the output types
-* Using the shortest path to go from your input to output
-* Collecting the knowledge of each function, and it's purpose
-* then, Golf
-
----
-
 ## Why is FP a good thing
 
-* Facilitates good practices (arrays of one type)
+* Facilitates good practices
 * Puts names to common patterns
 * Write less code
 * Read less code
 * Immutability
-* No need to name things
+* Name less variables
 * Can prove a function's correctness (to an extent)
 
----
+----
+
+## Swiss army effect
+
+* All functions serve a purpose
+* Each encodes a **pattern**
+* Recognizing the input and the output types
+* Using the shortest path to go from your input to output
+* Collecting the knowledge of each function, and it's purpose
+* Golf
+
+----
 
 ## Tips
 
@@ -304,6 +316,6 @@ const getVegies = pipe(
 ## Contact
 
 * Name: `Erik Sutherland`
-* Email: `erik.Sutherland@nike.com`
+* Email: `erik(dot)sutherland(at)nike(dot)com`
 * Slack: `@racoon`
 * Github: `MrRacoon`
