@@ -4,7 +4,7 @@
   "description": "An introduction to FP concepts for javascript programmers",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "reveal-md index.md --theme moon -w"
   },
   "repository": {
     "type": "git",
