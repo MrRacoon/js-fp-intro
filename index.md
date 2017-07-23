@@ -9,10 +9,11 @@ Erik Sutherland
 ## About Me
 
 * FP Enthusiast
-* BS CS/Psych from PSU
+* BS CS/Psych
+* Database Researcher
+* Started in DevOps (~ 4 yrs)
+* Landed in Frontend (~ 3 yrs)
 * Affinity for Haskell
-* Started in DevOps (wootz 4 linux)
-* Frontend for 5 years
 
 ----
 
@@ -20,6 +21,7 @@ Erik Sutherland
 
 * Type Signatures
 * Composition
+* Chaining
 * Currying
 
 ---
@@ -44,6 +46,7 @@ Erik Sutherland
 
 * Advocates chaining
 * Employs cool tricks for lazy evaluation
+* Mutable functions (need for speed)
 
 ----
 
@@ -116,7 +119,7 @@ const result = add10(2); // 12
 
 ---
 
-## Native Example
+## The data
 
 #### Some data
 
@@ -139,7 +142,7 @@ const data = [
 
 ```
 
-----
+---
 
 ## Native Example
 
@@ -181,7 +184,7 @@ vegieNames(data); // ['cauliflower']
 
 ```javascript
 // vegieNames :: [Produce] -> [String]
-const vegieNames = list => compose(
+const vegieNames = list => R.compose(
   getNames,
   onlyVegetables,
 )(list);
@@ -197,7 +200,7 @@ vegieNames(data); // ['cauliflower']
 
 ```javascript
 // vegieNames :: [Produce] -> [String]
-const vegieNames = list => pipe(
+const vegieNames = list => R.pipe(
   onlyVegetables,
   getNames,
 )(list);
@@ -209,11 +212,11 @@ vegieNames(data); // ['cauliflower']
 
 ## Composition Example
 
-#### Sprinkle in some Curry
+#### Remove the redundancy
 
 ```javascript
 // vegieNames :: [Produce] -> [String]
-const vegieNames = pipe(
+const vegieNames = R.pipe(
   onlyVegetables,
   getNames,
 );
@@ -223,39 +226,132 @@ vegieNames(data); // ['cauliflower']
 
 ---
 
-## Full FP Example
+## Lodash Example
 
-#### Revisiting the functions
+#### The Functions
 
 ```javascript
 // onlyVegetables :: [Produce] -> [Produce]
-const onlyVegetables = filter(
+const onlyVegetables = list => _.filter(
+  list,
   obj => obj.type === 'vegetable',
 );
 
 // getNames :: [Produce] -> [String]
-const getNames = map(
+const getNames = list => _.map(
+  list,
   obj => obj.name,
 );
 ```
 
 ----
 
-## Full FP Example
+## Lodash Example
 
-#### The extra mile
+#### Compose them?
+
+```javascript
+// vegieNames :: [Produce] -> [String]
+const vegieNames = list => _.chain(list)
+  .filter(obj => obj.type === 'vegetable')
+  .map(obj => obj.name)
+  .value();
+```
+
+----
+
+## Lodash Example
+
+#### Compose with reuse
+
+```javascript
+// vegieNames :: [Produce] -> [String]
+const vegieNames = list => _.chain(list)
+  .thru(onlyVegetables)
+  .thru(getNames)
+  .value();
+```
+
+----
+
+## Lodash Example
+
+#### In place
+
+```javascript
+const vegieNames = list =>
+  _.map(
+    _.filter(
+      list,
+      obj => obj.type === 'vegetable'
+    ),
+    obj => obj.name
+  );
+```
+
+---
+
+## Ramda Example
+
+#### The Functions
 
 ```javascript
 // onlyVegetables :: [Produce] -> [Produce]
-const onlyVegetables = filter(
-  whereEq({ type: 'vegetables' })
+const onlyVegetables = list => R.filter(
+  obj => obj.type === 'vegetable',
+  list,
 );
 
 // getNames :: [Produce] -> [String]
-const getNames = map(
-  prop('name')
+const getNames = list => R.map(
+  obj => obj.name,
+  list,
+);
+```
+
+----
+
+## Ramda Example
+
+#### Add the curry
+
+```javascript
+// onlyVegetables :: [Produce] -> [Produce]
+const onlyVegetables = R.filter(
+  obj => obj.type === 'vegetable',
 );
 
+// getNames :: [Produce] -> [String]
+const getNames = R.map(
+  obj => obj.name,
+);
+```
+
+----
+
+## Ramda Example
+
+#### replace the innards
+
+```javascript
+// onlyVegetables :: [Produce] -> [Produce]
+const onlyVegetables = R.filter(
+  R.whereEq({ type: 'vegetables' })
+);
+
+// getNames :: [Produce] -> [String]
+const getNames = R.map(
+  R.prop('name')
+);
+```
+
+----
+
+## Ramda Example
+
+#### Compose them
+
+```javascript
 // vegieNames :: [Produce] -> [String]
 const vegieNames = pipe(
   onlyVegetables,
@@ -265,15 +361,15 @@ const vegieNames = pipe(
 
 ----
 
-## Full FP Example
+## Ramda Example
 
 #### Cut out the middleman
 
 ```javascript
 // vegieNames :: [Produce] -> [String]
 const vegieNames = pipe(
-  filter(whereEq({ type: 'vegetables' })),
-  map(prop('name'))
+  R.filter(R.whereEq({ type: 'vegetables' })),
+  R.map(R.prop('name'))
 );
 ```
 
