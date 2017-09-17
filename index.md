@@ -37,25 +37,24 @@ Erik Sutherland
 ## FP in JS
 
 * First class functions
-* Partial application (`.bind`)
+* Partial application (`Function.bind()`)
 * Mostly enabled through libraries (`lodash`, `ramda`)
 
 ----
 
-## Main themes of Lodash
+## Main themes of [Lodash](https://lodash.com)
 
 * Advocates chaining
-* Employs cool tricks for lazy evaluation
-* Mutable functions (need for speed)
+* Mutable functions
+* Lazy evaluation
 
 ----
 
-## Main themes of Ramda
+## Main themes of [Ramda](http://ramdajs.com)
 
 * Advocates Composition
-* All functions are fixed arity and curried
-* Arguments are in reverse order from lodash (for composition)
-* Partial lazy evaluation support
+* Fixed arity and curried functions
+* Arguments are in reverse order from lodash
 * Functions are immutable
 
 ---
